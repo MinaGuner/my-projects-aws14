@@ -22,26 +22,26 @@ aws sts get-caller-identity --query Account --output text
 
 ```bash
 aws ec2 create-security-group \
-    --group-name roman_numbers_sec_grp\
+    --group-name roman_numbers_sec_grp-mina\
     --description "This Sec Group is to allow ssh and http from anywhere"
 ```
 
 - We can check the security Group with these commands
 ```bash
-aws ec2 describe-security-groups --group-names roman_numbers_sec_grp
+aws ec2 describe-security-groups --group-names roman_numbers_sec_grp-mina
 ```
 
 2. Create Rules of security Group
 
 ```bash
 aws ec2 authorize-security-group-ingress \
-    --group-name roman_numbers_sec_grp \
+    --group-name roman_numbers_sec_grp-mina \
     --protocol tcp \
     --port 22 \
     --cidr 0.0.0.0/0
 
 aws ec2 authorize-security-group-ingress \
-    --group-name roman_numbers_sec_grp \
+    --group-name roman_numbers_sec_grp-mina \
     --protocol tcp \
     --port 80 \
     --cidr 0.0.0.0/0
@@ -78,7 +78,7 @@ yum update -y
 yum install python3
 pip3 install flask
 cd /home/ec2-user
-FOLDER="https://raw.githubusercontent.com/okti3535/my-projects-aws14/main/Project-001-Roman-Numerals-Converter"
+FOLDER="https://raw.githubusercontent.com/MinaGuner/my-projects-aws14/refs/heads/main/Project-001-Roman-Numerals-Converter"
 wget ${FOLDER}/app.py
 mkdir templates && cd templates
 wget ${FOLDER}/templates/index.html
@@ -87,7 +87,7 @@ cd ..
 python3 app.py
 ```
 ```bash
-aws ec2 run-instances --image-id $LATEST_AMI --count 1 --instance-type t2.micro --key-name okt-aws --security-group-ids sg-xxxxxxxxxx --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=roman_numbers}]' --user-data file:///home/ec2-user/userdata.sh
+aws ec2 run-instances --image-id $LATEST_AMI --count 1 --instance-type t3.micro --key-name first-key-pair --security-group-ids sg-042a6838744917bdd --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=roman_numbers}]' --user-data file:///home/ec2-user/userdata.sh
 or
 
 aws ec2 run-instances \
@@ -118,7 +118,7 @@ aws ec2 terminate-instances --instance-ids <We have already learned this id with
 ```
 - To delete security groups
 ```bash
-aws ec2 delete-security-group --group-name roman_numbers_sec_grp
+aws ec2 delete-security-group --group-name roman_numbers_sec_grp-mina
 ```
 # aws ec2 create-tags --resources i-5203422c --tags Key=Name,Value=MyInstance
 # https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html
